@@ -3,43 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wannar OS | منصة ونار التعليمية</title>
+    <title>Wannar | مسار الإنجاز</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">WANNAR <span>STUDENT</span></div>
+    <div class="app-layout">
+        <aside class="side-panel">
+            <div class="brand">
+                <img src="https://framerusercontent.com/images/kC0G7MIsUoN4ZfJ6M2XFvjVpI.png" alt="Wannar Logo" class="mini-logo">
+                <h2>وَنـار</h2>
+            </div>
+
+            <div class="tool-card">
+                <h3>مؤقت التركيز</h3>
+                <div id="timerDisplay" class="big-timer">25:00</div>
+                <button id="timerBtn" class="main-action">ابدأ الآن</button>
+            </div>
+
+            <div class="progress-info">
+                <p>مستوى إنجازك</p>
+                <div class="bar-bg"><div id="progressBar" class="bar-fill"></div></div>
+                <span id="progressText">0%</span>
+            </div>
+
+            <button id="addStepBtn" class="secondary-action">سجل إنجاز جديد +</button>
             
-            <div class="card status-card">
-                <p>مخطط الإنجاز الفردي</p>
-                <div class="progress-container">
-                    <div id="progressBar" class="progress-bar"></div>
-                </div>
-                <span id="progressText">0% مكتمل</span>
-            </div>
-
-            <div class="card timer-card">
-                <div id="timerDisplay" class="timer">25:00</div>
-                <button id="timerBtn" class="primary-btn">ابدأ جلسة التركيز</button>
-            </div>
-
-            <div class="task-input-section">
-                <input type="text" id="taskName" placeholder="ما هي مادة اليوم؟">
-                <button id="addProgressBtn" class="secondary-btn">تحديث المعمار 🏗️</button>
-            </div>
-
-            <div class="user-info">
-                <p id="userName">المستخدم: طالب ونار</p>
-                <button onclick="resetSystem()" class="reset-btn">إعادة ضبط المخطط</button>
-            </div>
+            <button onclick="resetData()" class="text-link">تصفير السجل</button>
         </aside>
 
-        <main class="viewport">
-            <div class="grid-floor" id="cityGrid">
+        <main class="map-viewport">
+            <div class="blueprint-container">
+                <div class="header-overlay">
+                    <h1>خريطة طريقك للدراسة</h1>
+                    <p>كل مربع يمثل خطوة نحو النجاح</p>
                 </div>
+                
+                <div id="achievementMap" class="achievement-grid">
+                    </div>
+            </div>
         </main>
     </div>
 
