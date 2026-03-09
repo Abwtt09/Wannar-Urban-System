@@ -1,61 +1,94 @@
-// 1. المخطط الهندسي الدقيق (لا توجد عشوائية نهائياً)
-// كل قطعة لها مكانها الهندسي المدروس لتكوين مبنى متناظر وفخم
+// 1. المخطط المعماري - إحداثيات ثابتة لبناء "صرح ونار"
 const masterPlan = [
-    // المرحلة الأولى: الأساسات والمنصة (Foundation)
-    { id: 1, x: 0, y: 0, w: 200, l: 200, h: 20, color: '#1e293b', name: "الأساس الأكاديمي" },
-    
-    // المرحلة الثانية: الأجنحة الجانبية (الأدوار الأولى)
-    { id: 2, x: 20, y: 20, w: 50, l: 160, h: 60, color: '#334155', name: "الجناح الأيمن" },
-    { id: 3, x: 130, y: 20, w: 50, l: 160, h: 60, color: '#334155', name: "الجناح الأيسر" },
-    
-    // المرحلة الثالثة: الساحات والمرافق
-    { id: 4, x: 70, y: 20, w: 60, l: 40, h: 40, color: '#0ea5e9', name: "مرافق البحث" },
-    { id: 5, x: 70, y: 140, w: 60, l: 40, h: 40, color: '#0ea5e9', name: "قاعة الابتكار" },
-    
-    // المرحلة الرابعة: البرج المركزي (كتلة ضخمة في المنتصف)
-    { id: 6, x: 60, y: 60, w: 80, l: 80, h: 120, color: '#f8fafc', name: "البرج الرئيسي" },
-    
-    // المرحلة الخامسة: قمة البرج (التتويج)
-    { id: 7, x: 70, y: 70, w: 60, l: 60, h: 160, color: '#fbbf24', name: "قمة الإنجاز" }
+    { x: 50,  y: 50,  w: 100, h: 40,  color: '#1e293b' }, // القاعدة
+    { x: 150, y: 50,  w: 100, h: 40,  color: '#1e293b' }, // تمدد القاعدة
+    { x: 50,  y: 150, w: 100, h: 40,  color: '#1e293b' },
+    { x: 150, y: 150, w: 100, h: 40,  color: '#1e293b' },
+    { x: 70,  y: 70,  w: 60,  h: 120, color: '#0ea5e9' }, // البرج الأول
+    { x: 170, y: 70,  w: 60,  h: 120, color: '#0ea5e9' }, // البرج الثاني
+    { x: 120, y: 120, w: 60,  h: 200, color: '#f8fafc' }, // البرج الرئيسي الفخم
+    { x: 130, y: 130, w: 40,  h: 240, color: '#fbbf24' }  // قمة الإنجاز
 ];
 
-// 2. دالة البناء المتسلسل
-let currentLevel = parseInt(localStorage.getItem('studentLevel')) || 0;
+let currentStep = parseInt(localStorage.getItem('wannarProgress')) || 0;
+let timeLeft = 1500;
+let timerInterval;
 
-function buildNextStage() {
-    if (currentLevel >= masterPlan.length) {
-        alert("اكتمل المبنى بالكامل! تم تحقيق الهدف الحرم الجامعي.");
-        return;
+// تهيئة النظام
+window.onload = () => {
+    renderExistingBuildings();
+    updateUI();
+};
+
+function renderExistingBuildings() {
+    for (let i = 0; i < currentStep; i++) {
+        createBuildingElement(masterPlan[i], i);
     }
-
-    // سحب بيانات القطعة التالية من المخطط
-    const part = masterPlan[currentLevel];
-    
-    // رسم القطعة في مكانها الدقيق بدون أي نسبة خطأ أو عشوائية
-    drawExactPart(part);
-    
-    currentLevel++;
-    localStorage.setItem('studentLevel', currentLevel);
 }
 
-function drawExactPart(data) {
-    const site = document.getElementById('site');
+function createBuildingElement(data, index) {
+    const grid = document.getElementById('cityGrid');
     const block = document.createElement('div');
-    block.className = 'architectural-block';
-    
-    // تطبيق الإحداثيات الهندسية الصارمة
-    block.style.left = `${data.x}px`;
-    block.style.top = `${data.y}px`;
-    block.style.width = `${data.w}px`;
-    block.style.height = `${data.l}px`; // الطول في المنظور الثلاثي الأبعاد
-    block.style.setProperty('--h', `${data.h}px`);
+    block.className = 'block visible';
+    block.style.left = data.x + 'px';
+    block.style.top = data.y + 'px';
+    block.style.setProperty('--w', data.w + 'px');
+    block.style.setProperty('--h', data.h + 'px');
     block.style.setProperty('--c', data.color);
 
     block.innerHTML = `
-        <div class="face front" style="width: ${data.w}px;"></div>
-        <div class="face right" style="width: ${data.l}px;"></div>
-        <div class="face top" style="width: ${data.w}px; height: ${data.l}px;"></div>
+        <div class="face front" style="width:${data.w}px"></div>
+        <div class="face right" style="width:${data.w}px"></div>
+        <div class="face top" style="width:${data.w}px"></div>
     `;
-    
-    site.appendChild(block);
+    grid.appendChild(block);
+}
+
+// إضافة إنجاز جديد
+document.getElementById('addProgressBtn').onclick = () => {
+    if (currentStep < masterPlan.length) {
+        createBuildingElement(masterPlan[currentStep], currentStep);
+        currentStep++;
+        localStorage.setItem('wannarProgress', currentStep);
+        updateUI();
+    } else {
+        alert("مبروك! لقد أتممت بناء الصرح التعليمي بالكامل.");
+    }
+};
+
+function updateUI() {
+    let percentage = Math.floor((currentStep / masterPlan.length) * 100);
+    document.getElementById('progressBar').style.width = percentage + "%";
+    document.getElementById('progressText').innerText = percentage + "% مكتمل";
+}
+
+// نظام المؤقت
+document.getElementById('timerBtn').onclick = function() {
+    if (this.innerText === "ابدأ جلسة التركيز") {
+        this.innerText = "توقف";
+        timerInterval = setInterval(updateTimer, 1000);
+    } else {
+        clearInterval(timerInterval);
+        this.innerText = "ابدأ جلسة التركيز";
+    }
+};
+
+function updateTimer() {
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("انتهى الوقت! قطعة جديدة تضاف لمدينتك.");
+        document.getElementById('addProgressBtn').click();
+        timeLeft = 1500;
+    }
+    timeLeft--;
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+    document.getElementById('timerDisplay').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+}
+
+function resetSystem() {
+    if(confirm("سيتم مسح كل تقدمك، هل أنت متأكد؟")) {
+        localStorage.clear();
+        location.reload();
+    }
 }
