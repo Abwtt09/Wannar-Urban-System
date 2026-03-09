@@ -2,47 +2,38 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wannar | مسار الإنجاز</title>
+    <title>Wannar OS | لوحة الإنجاز</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-layout">
-        <aside class="side-panel">
-            <div class="brand">
-                <img src="https://framerusercontent.com/images/kC0G7MIsUoN4ZfJ6M2XFvjVpI.png" alt="Wannar Logo" class="mini-logo">
-                <h2>وَنـار</h2>
-            </div>
-
-            <div class="tool-card">
-                <h3>مؤقت التركيز</h3>
-                <div id="timerDisplay" class="big-timer">25:00</div>
-                <button id="timerBtn" class="main-action">ابدأ الآن</button>
-            </div>
-
-            <div class="progress-info">
-                <p>مستوى إنجازك</p>
-                <div class="bar-bg"><div id="progressBar" class="bar-fill"></div></div>
-                <span id="progressText">0%</span>
-            </div>
-
-            <button id="addStepBtn" class="secondary-action">سجل إنجاز جديد +</button>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">WANNAR <span>PRO</span></div>
             
-            <button onclick="resetData()" class="text-link">تصفير السجل</button>
+            <div class="stats-box">
+                <p>مستوى العمران الدراسي</p>
+                <div class="progress-track"><div id="bar" class="fill"></div></div>
+                <span id="percent">0%</span>
+            </div>
+
+            <div class="timer-section">
+                <div id="clock" class="timer">25:00</div>
+                <button id="startTimer" class="btn-primary">بدأ التركيز</button>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="subject" placeholder="اسم المادة/الفصل">
+                <button id="buildBtn" class="btn-build">إضافة إنجاز 🏗️</button>
+            </div>
+
+            <button onclick="resetAll()" class="btn-reset">تصفير النظام</button>
         </aside>
 
-        <main class="map-viewport">
-            <div class="blueprint-container">
-                <div class="header-overlay">
-                    <h1>خريطة طريقك للدراسة</h1>
-                    <p>كل مربع يمثل خطوة نحو النجاح</p>
+        <main class="viewport">
+            <div class="iso-plane" id="plane">
                 </div>
-                
-                <div id="achievementMap" class="achievement-grid">
-                    </div>
-            </div>
         </main>
     </div>
 
