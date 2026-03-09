@@ -1,78 +1,76 @@
-const totalSteps = 20; // خريطة من 20 خطوة
-let currentProgress = parseInt(localStorage.getItem('wannar2dProgress')) || 0;
+let currentCount = parseInt(localStorage.getItem('wannarSteps')) || 0;
 let timeLeft = 1500;
-let timerRunning = false;
-let timerInterval;
+let timerActive = false;
+let interval;
 
 window.onload = () => {
-    initGrid();
+    // رسم المربعات السابقة عند التحميل
+    for (let i = 0; i < currentCount; i++) {
+        drawBlock(i);
+    }
     updateUI();
 };
 
-function initGrid() {
-    const grid = document.getElementById('achievementMap');
-    grid.innerHTML = '';
-    for (let i = 1; i <= totalSteps; i++) {
-        const box = document.createElement('div');
-        box.className = 'step-box';
-        box.id = `step-${i}`;
-        box.innerText = i;
-        grid.appendChild(box);
-    }
-}
-
-document.getElementById('addStepBtn').onclick = () => {
-    if (currentProgress < totalSteps) {
-        currentProgress++;
-        localStorage.setItem('wannar2dProgress', currentProgress);
+document.getElementById('buildBtn').onclick = () => {
+    if (currentCount < 25) { // شبكة 5x5
+        drawBlock(currentCount);
+        currentCount++;
+        localStorage.setItem('wannarSteps', currentCount);
         updateUI();
     }
 };
 
-function updateUI() {
-    for (let i = 1; i <= totalSteps; i++) {
-        const box = document.getElementById(`step-${i}`);
-        if (i <= currentProgress) {
-            box.classList.add('active');
-            box.innerHTML = '✔';
-        } else {
-            box.classList.remove('active');
-            box.innerHTML = i;
-        }
-    }
-    let percent = Math.floor((currentProgress / totalSteps) * 100);
-    document.getElementById('progressBar').style.width = percent + "%";
-    document.getElementById('progressText').innerText = percent + "% مكتمل";
+function drawBlock(index) {
+    const plane = document.getElementById('plane');
+    const block = document.createElement('div');
+    block.className = 'iso-block';
+    
+    // حساب الموقع بدقة في شبكة 5x5 (Grid System)
+    const gap = 75; // المسافة بين المربعات
+    const col = index % 5;
+    const row = Math.floor(index / 5);
+
+    block.style.left = (col * gap) + 'px';
+    block.style.top = (row * gap) + 'px';
+    block.innerText = index + 1;
+
+    plane.appendChild(block);
 }
 
-// نظام المؤقت البسيط
-document.getElementById('timerBtn').onclick = function() {
-    if (!timerRunning) {
-        timerInterval = setInterval(runTimer, 1000);
-        this.innerText = "إيقاف";
-        timerRunning = true;
+function updateUI() {
+    let p = Math.floor((currentCount / 25) * 100);
+    document.getElementById('bar').style.width = p + "%";
+    document.getElementById('percent').innerText = p + "% مكتمل";
+}
+
+// مؤقت التركيز
+document.getElementById('startTimer').onclick = function() {
+    if (!timerActive) {
+        interval = setInterval(timerLogic, 1000);
+        this.innerText = "توقف";
+        timerActive = true;
     } else {
-        clearInterval(timerInterval);
+        clearInterval(interval);
         this.innerText = "استمرار";
-        timerRunning = false;
+        timerActive = false;
     }
 };
 
-function runTimer() {
+function timerLogic() {
     if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        alert("إنجاز رائع! تم فتح خطوة جديدة في خريطتك.");
-        document.getElementById('addStepBtn').click();
+        clearInterval(interval);
+        alert("كفو! تم فتح منطقة جديدة في مخططك.");
+        document.getElementById('buildBtn').click();
         timeLeft = 1500;
     }
     timeLeft--;
     let m = Math.floor(timeLeft / 60);
     let s = timeLeft % 60;
-    document.getElementById('timerDisplay').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+    document.getElementById('clock').innerText = `${m}:${s < 10 ? '0'+s : s}`;
 }
 
-function resetData() {
-    if(confirm("هل تريد البدء من جديد؟")) {
+function resetAll() {
+    if(confirm("مسح المخطط؟")) {
         localStorage.clear();
         location.reload();
     }
