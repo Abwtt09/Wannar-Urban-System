@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wannar - Professional Progression System</title>
+    <style>
+        :root {
+            --bg-canvas: #0f172a; /* لون كحلي فاخر للهوية التقنية */
+            --marble-white: #ffffff;
+            --tech-blue: #38bdf8;
+            --creative-gold: #fbbf24;
+            --glass-opacity: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background: var(--bg-canvas); color: white;
+            display: grid; grid-template-columns: 350px 1fr; height: 100vh;
+        }
+
+        /* لوحة التحكم */
+        .control-panel {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px; border-left: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        
+        select, input {
+            background: #1e293b; border: 1px solid #334155;
+            padding: 12px; color: white; border-radius: 8px;
+        }
+
+        .btn-build {
+            background: linear-gradient(45deg, #6366f1, #a855f7);
+            border: none; padding: 15px; border-radius: 8px;
+            color: white; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-build:hover { transform: scale(1.02); }
+
+        /* مساحة العرض المعمارية */
+        .city-container {
+            position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .isometric-grid {
+            position: relative; width: 600px; height: 600px;
+            transform: rotateX(60deg) rotateZ(-45deg);
+            transform-style: preserve-3d;
+            background-image: radial-gradient(circle, #334155 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* احترافية المبنى (3D Box System) */
+        .building-unit {
+            position: absolute; width: 40px; height: 40px;
+            transform-style: preserve-3d;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* أسطح المكعب */
+        .side {
+            position: absolute; width: 100%; height: var(--h);
+            background: var(--c);
+            border: 0.5px solid rgba(0,0,0,0.1);
+        }
+        .front  { transform: rotateY(0deg) translateZ(20px); filter: brightness(0.9); }
+        .right  { transform: rotateY(90deg) translateZ(20px); filter: brightness(0.7); }
+        .top    { height: 40px; transform: rotateX(90deg) translateZ(calc(var(--h) - 20px)); background: var(--c); filter: brightness(1.1); }
+
+        .label-tag {
+            position: absolute; transform: rotateZ(45deg) rotateX(-60deg);
+            background: white; color: black; padding: 2px 8px;
+            font-size: 10px; border-radius: 4px; white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <h2>🏗️ عمران ونار</h2>
+        <div class="input-group">
+            <label>اسم الإنجاز / المادة</label>
+            <input type="text" id="taskName" placeholder="مثلاً: تصميم الواجهات">
+        </div>
+        <div class="input-group">
+            <label>نوع التخصص</label>
+            <select id="taskType">
+                <option value="#ffffff">معماري (أبيض رخامي)</option>
+                <option value="#38bdf8">تقني (أزرق نيون)</option>
+                <option value="#fbbf24">إبداعي (ذهبي)</option>
+            </select>
+        </div>
+        <button class="btn-build" onclick="buildNew()">إضافة لمدينتي</button>
+        <div id="stats" style="margin-top: auto; font-size: 0.9rem; color: #94a3b8;">
+            إجمالي المباني: <span id="count">0</span>
+        </div>
+    </div>
+
+    <div class="city-container">
+        <div class="isometric-grid" id="grid"></div>
+    </div>
+
+    <script>
+        let buildingCount = 0;
+        function buildNew() {
+            const name = document.getElementById('taskName').value || "إنجاز";
+            const color = document.getElementById('taskType').value;
+            const grid = document.getElementById('grid');
+            
+            const height = Math.floor(Math.random() * 150) + 40;
+            const posX = Math.floor(Math.random() * 500);
+            const posY = Math.floor(Math.random() * 500);
+
+            const building = document.createElement('div');
+            building.className = 'building-unit';
+            building.style.left = `${posX}px`;
+            building.style.top = `${posY}px`;
+            building.style.setProperty('--h', `${height}px`);
+            building.style.setProperty('--c', color);
+
+            building.innerHTML = `
+                <div class="side front"></div>
+                <div class="side right"></div>
+                <div class="side top"></div>
+                <div class="label-tag" style="top: -20px">${name}</div>
+            `;
+
+            grid.appendChild(building);
+            buildingCount++;
+            document.getElementById('count').innerText = buildingCount;
+        }
+    </script>
+</body>
+</html>
