@@ -2,203 +2,47 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Wannar - نظام الإنجاز الاحترافي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #05080f;
-            --card: #0f1624;
-            --accent: #00f2ff;
-            --border: rgba(0, 242, 255, 0.2);
-            --neon-glow: 0 0 15px rgba(0, 242, 255, 0.4);
-        }
-
-        body {
-            margin: 0; font-family: 'Tajawal', sans-serif;
-            background: var(--bg); color: white;
-            display: grid; grid-template-columns: 350px 1fr; height: 100vh;
-            overflow: hidden;
-        }
-
-        /* القائمة الجانبية - تصميم Dark Tech */
-        .sidebar {
-            background: var(--card); border-left: 1px solid var(--border);
-            padding: 25px; display: flex; flex-direction: column; gap: 20px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5); z-index: 10;
-        }
-
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; text-align: center; }
-
-        .stat-card {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            padding: 15px; border-radius: 12px; text-align: center;
-        }
-
-        .timer-display {
-            font-family: 'Orbitron', sans-serif; font-size: 3rem; 
-            color: var(--accent); text-shadow: var(--neon-glow); margin: 10px 0;
-        }
-
-        .input-group { display: flex; flex-direction: column; gap: 10px; }
-        input, select {
-            background: #1a2233; border: 1px solid var(--border);
-            padding: 12px; color: white; border-radius: 8px; outline: none;
-        }
-
-        button {
-            padding: 15px; border-radius: 8px; border: none; font-weight: bold;
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
-        }
-        .btn-glow { background: var(--accent); color: #000; box-shadow: var(--neon-glow); }
-        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--accent); }
-
-        /* منطقة العرض - Blueprint View */
-        .canvas {
-            position: relative; display: flex; align-items: center; justify-content: center;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        .building-site {
-            position: relative; width: 600px; height: 600px;
-            transform: rotateX(60deg) rotateZ(-30deg);
-            transform-style: preserve-3d;
-        }
-
-        /* المبنى النهائي المخطط له */
-        .part {
-            position: absolute; transform-style: preserve-3d;
-            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-            opacity: 0; transform: translateZ(500px) scale(0); /* تبدأ من السماء */
-        }
-        .part.active { opacity: 1; transform: translateZ(0) scale(1); }
-
-        /* قطع المبنى بتصميم زجاجي نيون */
-        .block {
-            position: absolute; background: rgba(0, 242, 255, 0.15);
-            border: 1px solid var(--accent); box-shadow: inset 0 0 10px var(--accent);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wannar OS | منصة ونار التعليمية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="sidebar">
-        <h1>WANNAR OS</h1>
-        
-        <div class="stat-card">
-            <div>التقدم المعماري</div>
-            <div id="progressText" style="font-size: 1.2rem; color: var(--accent);">0%</div>
-            <div style="width:100%; height:4px; background:#1a2233; margin-top:10px;">
-                <div id="progressBar" style="width:0%; height:100%; background:var(--accent);"></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">WANNAR <span>STUDENT</span></div>
+            
+            <div class="card status-card">
+                <p>مخطط الإنجاز الفردي</p>
+                <div class="progress-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <span id="progressText">0% مكتمل</span>
             </div>
-        </div>
 
-        <div class="stat-card">
-            <div id="timer-display" class="timer-display">25:00</div>
-            <button class="btn-glow" id="startBtn" style="width:100%" onclick="toggleTimer()">بدأ جلسة تركيز</button>
-        </div>
+            <div class="card timer-card">
+                <div id="timerDisplay" class="timer">25:00</div>
+                <button id="timerBtn" class="primary-btn">ابدأ جلسة التركيز</button>
+            </div>
 
-        <div class="input-group">
-            <input type="text" id="taskName" placeholder="ماذا ستنجز الآن؟">
-            <select id="importance">
-                <option value="1">مهمة عادية (قطعة أرضية)</option>
-                <option value="2">مهمة كبرى (جدار/عامود)</option>
-                <option value="3">إتمام فصل (سقف/قبة)</option>
-            </select>
-            <button onclick="addProgress()" style="background:#1a2233; color:white; border:1px solid var(--border)">تحديث المخطط 🏗️</button>
-        </div>
+            <div class="task-input-section">
+                <input type="text" id="taskName" placeholder="ما هي مادة اليوم؟">
+                <button id="addProgressBtn" class="secondary-btn">تحديث المعمار 🏗️</button>
+            </div>
 
-        <button onclick="resetCity()" style="margin-top:auto; background:none; color:#444; font-size:0.7rem;">إعادة تعيين النظام</button>
+            <div class="user-info">
+                <p id="userName">المستخدم: طالب ونار</p>
+                <button onclick="resetSystem()" class="reset-btn">إعادة ضبط المخطط</button>
+            </div>
+        </aside>
+
+        <main class="viewport">
+            <div class="grid-floor" id="cityGrid">
+                </div>
+        </main>
     </div>
 
-    <div class="canvas">
-        <div class="building-site" id="site">
-            </div>
-    </div>
-
-    <script>
-        let timeLeft = 1500;
-        let timer;
-        let isRunning = false;
-        const totalParts = 20; // عدد القطع المكونة للمبنى النهائي
-        let currentParts = parseInt(localStorage.getItem('wannarProgress')) || 0;
-
-        // توليد قطع المبنى "المخفية" في أماكن محددة ومنظمة
-        function initBlueprint() {
-            const site = document.getElementById('site');
-            for (let i = 0; i < totalParts; i++) {
-                const part = document.createElement('div');
-                part.className = 'part';
-                part.id = `part-${i}`;
-                
-                // حساب توزيع منظم للمبنى
-                let x = (i % 5) * 80;
-                let y = Math.floor(i / 5) * 80;
-                let h = 40 + (Math.random() * 100);
-
-                part.style.left = x + 'px';
-                part.style.top = y + 'px';
-                part.innerHTML = `
-                    <div class="block" style="width:70px; height:70px; transform: rotateX(-90deg) translateZ(35px); height:${h}px"></div>
-                    <div class="block" style="width:70px; height:70px; transform: rotateY(90deg) translateZ(35px); height:${h}px"></div>
-                    <div class="block" style="width:70px; height:70px; transform: translateZ(${h}px); background:rgba(0,242,255,0.4)"></div>
-                `;
-                site.appendChild(part);
-            }
-            updateVisuals();
-        }
-
-        function toggleTimer() {
-            if (isRunning) {
-                clearInterval(timer);
-                document.getElementById('startBtn').innerText = "استئناف";
-            } else {
-                timer = setInterval(() => {
-                    if (timeLeft <= 0) {
-                        clearInterval(timer);
-                        addProgress();
-                        timeLeft = 1500;
-                    }
-                    timeLeft--;
-                    updateTimerDisplay();
-                }, 1000);
-                document.getElementById('startBtn').innerText = "تركيز...";
-            }
-            isRunning = !isRunning;
-        }
-
-        function updateTimerDisplay() {
-            let m = Math.floor(timeLeft / 60);
-            let s = timeLeft % 60;
-            document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-        }
-
-        function addProgress() {
-            if (currentParts < totalParts) {
-                currentParts++;
-                localStorage.setItem('wannarProgress', currentParts);
-                updateVisuals();
-            }
-        }
-
-        function updateVisuals() {
-            for (let i = 0; i < totalParts; i++) {
-                const el = document.getElementById(`part-${i}`);
-                if (i < currentParts) el.classList.add('active');
-            }
-            let percent = Math.floor((currentParts / totalParts) * 100);
-            document.getElementById('progressText').innerText = percent + "%";
-            document.getElementById('progressBar').style.width = percent + "%";
-        }
-
-        function resetCity() {
-            localStorage.clear();
-            location.reload();
-        }
-
-        initBlueprint();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
